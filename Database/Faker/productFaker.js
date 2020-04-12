@@ -67,9 +67,9 @@ for (let i = 1; i < 3; i += 1) {
         characteristicsPKIncrement();
         characteristics_reviewsPKIncrement();
 
-        // Generate a Fit row in the table
+        // Generate a Fit row in the characteristics table
         fs.appendFileSync('../csvFiles/generated-characteristics.csv', `${characteristicsPK},${productPK},"Fit"\n`);
-        // Generate a fit value row in the table
+        // Generate a fit value row in the characteristics_reviews table
         fs.appendFileSync('../csvFiles/generated-characteristics_reviews.csv', `${characteristics_reviewsPK},${characteristicsPK},${reviewsPK},${faker.random.number({ min: 1, max: 5 })}\n`);
         characteristicsPKIncrement();
         characteristics_reviewsPKIncrement();

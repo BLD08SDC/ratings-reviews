@@ -79,7 +79,7 @@ app.put('/reviews/report/:review_id', (req, res) => {
         .catch(error => console.log(error))
 })
 
-// Express need to know what port to listen on, a console.log callback serves as a confirmation that the server is properly functioning and running
+// Express needs to know what port to listen on, a console.log callback serves as a confirmation that the server is properly functioning and running
 app.listen(port, () => {
     console.log(`the server is running on port ${port}`)
 });
