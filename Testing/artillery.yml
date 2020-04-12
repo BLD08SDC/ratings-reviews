@@ -1,13 +1,47 @@
+# Normal Test
+# config:
+#     target: 'http://localhost:3000'
+#     processor: "./randomProductId.js"
+#     phases:
+#       - duration: 60
+#         arrivalRate: 5
+#         name: "Initialize the testing"
+#       - duration: 120
+#         arrivalRate: 5
+#         rampTo: 100
+#         name: "Ramp up testing"
+#       - duration: 600
+#         arrivalRate: 100
+#         name: "High load testing"
+# scenarios:
+#   - name: "Get List of Reviews"
+#     flow:
+#       # - post:
+#           # url: "/reviews/2"
+#       - put:
+#           url: /reviews/report/3
+#       - put:
+#           url: "/reviews/helpful/2"
+#       - get:
+#           url: "/reviews/2/list"
+
+
+# Quick Test
 config:
-  - target: 'http://localhost:3000'
+    target: 'http://localhost:3000'
     processor: "./randomProductId.js"
     phases:
-      - duration: 30
-        arrivalRate: 10
-        rampTo: 50
+      - duration: 10
+        arrivalRate: 5
         name: "Initialize the testing"
 scenarios:
   - name: "Get List of Reviews"
     flow:
+      # - post:
+          # url: "/reviews/2"
+      - put:
+          url: /reviews/report/3
+      - put:
+          url: "/reviews/helpful/2"
       - get:
-          url: "/reviews/{{ randomProductId }}/list"
+          url: "/reviews/2/list"
