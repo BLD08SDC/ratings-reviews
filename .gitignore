@@ -1,8 +1,11 @@
 # ignore all csv files
 *.csv
 #ignore all .env files
-# *.env
-# .env
+*.env
+.env
+
+# ignore node_modules folder
+node_modules/
 
 # Compiled source #
 ###################
