@@ -13,31 +13,9 @@ const getListOfReviews = (req) => {
     const count = parseInt(req.count) || 5;
     const sort = req.sort || 'date';
     // const offsetBy = page * count || 0;
-    // SELECT * FROM reviews JOIN reviews_photos ON reviews.id = reviews_photos.review_id WHERE reviews.product_id=$1 AND NOT reviews.reported ORDER BY $3 DESC LIMIT $2
+
     return pool
       .query(`SELECT * FROM reviews FULL JOIN reviews_photos ON reviews.id = reviews_photos.review_id WHERE reviews.product_id=$1 AND NOT reviews.reported ORDER BY $3 DESC LIMIT $2`, [product_id, count, sort]) 
-        // .then((data) => {
-        //   const results = data.rows.map(i => ({
-        //     "review_id": i.id,
-        //     "rating": i.rating,
-        //     "summary": i.summary,
-        //     "recommend": i.recommend,
-        //     "response": i.response,
-        //     "body": i.body,
-        //     "date": i.date,
-        //     "reviewer_name": i.reviewer_name,
-        //     "helpfulness": i.helpfulness,
-        //     "photos": [],
-        //   }));
-
-        //   return ({
-        //     "product": `${id}`,
-        //     "page": page,
-        //     "count": count,
-        //     "results": results,
-        //   })
-        // })
-        // .catch(error => console.log(error))
 }
 
 const getCharacteristicsMeta = (req, res) => {
@@ -60,17 +38,11 @@ const addReview = (req) => {
   const response = req.response || null;
   const helpfulness = req.helpfulness || 0;
   let id = null;
-  
-  // const id = pool.query(`SELECT currval(pg_get_serial_sequence('reviews','id')`).then(error=> console.log(error))
 
   return pool
-  // OLD // SELECT nextval(pg_get_serial_sequence('reviews','id'))
-  // NEW // SELECT nextval('reviews_id_seq')
-  // 3rd // SELECT MAX(id) FROM reviews
     .query(`SELECT MAX(id) FROM reviews`)
       .then((data) => {
-        // console.log(data.rows[0].max + 1);
-        // id = `${data.rows[0].max + 1}`;
+        // console.log(data.rows[0].max)
         id = data.rows[0].max + 1;
         return pool.query(
           `INSERT INTO

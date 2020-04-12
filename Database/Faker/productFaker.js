@@ -22,7 +22,7 @@ for (let i = 1; i < 10000001; i += 1) {
     let randomCategory = faker.commerce.department();
     let randomDefault_price = faker.random.number({ min: 1, max: 999 });
 
-    fs.appendFileSync('csv-files/generated-product.csv', `${index},"${randomName}","${randomSlogan}","${randomDescription}","${randomCategory}",${randomDefault_price}\n`);
+    fs.appendFileSync('../csv-files/generated-product.csv', `${index},"${randomName}","${randomSlogan}","${randomDescription}","${randomCategory}",${randomDefault_price}\n`);
     
     increment();
 };
