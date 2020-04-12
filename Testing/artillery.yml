@@ -33,7 +33,7 @@ config:
     phases:
       - duration: 10
         arrivalRate: 5
-        name: "Initialize the testing"
+        name: "Test the testing"
 scenarios:
   - name: "Get List of Reviews"
     flow:
