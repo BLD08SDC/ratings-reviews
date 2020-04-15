@@ -15,7 +15,34 @@ const getListOfReviews = (req) => {
     // const offsetBy = page * count || 0;
 
     return pool
-      .query(`SELECT * FROM reviews FULL JOIN reviews_photos ON reviews.id = reviews_photos.review_id WHERE reviews.product_id=$1 AND NOT reviews.reported ORDER BY $3 DESC LIMIT $2`, [product_id, count, sort]) 
+      .query(`SELECT * FROM reviews FULL JOIN reviews_photos ON reviews.id = reviews_photos.review_id WHERE reviews.product_id=$1 AND NOT reviews.reported ORDER BY $3 DESC LIMIT $2`, [product_id, count, sort])
+      .then((data) => {
+        const results = data.rows.map(i => {
+          return ({
+          "review_id": i.id,
+          "rating": i.rating,
+          "summary": i.summary,
+          "recommend": i.recommend,
+          "response": i.response,
+          "body": i.body,
+          "date": i.date,
+          "reviewer_name": i.reviewer_name,
+          "helpfulness": i.helpfulness,
+          "photos": [],
+          })
+        });
+  
+        // filter results var array for duplicates and fix how photo urls are returned
+        
+        return ({
+          "product": `${product_id}`,
+          "page": page,
+          "count": count,
+          "results": results,
+        })
+      })
+      .catch(error => console.log(error))
+      // SELECT * FROM reviews FULL JOIN reviews_photos ON reviews.id = reviews_photos.review_id WHERE reviews.product_id=$1 AND NOT reviews.reported ORDER BY $3 DESC LIMIT $2
 }
 
 const getCharacteristicsMeta = (req, res) => {
@@ -76,6 +103,7 @@ const addReview = (req) => {
           ]
         )
       })
+        .catch(error => console.log(error))
 }
 
 const markHelpful = (req, res) => {
@@ -83,6 +111,7 @@ const markHelpful = (req, res) => {
 
     return pool
       .query(`UPDATE reviews SET helpfulness=helpfulness+1 WHERE id=$1`, [id])
+        .catch(error => console.log(error))
 }
 
 const reportReview = (req, res) => {
@@ -90,6 +119,7 @@ const reportReview = (req, res) => {
 
     return pool
       .query(`UPDATE reviews SET reported='t' WHERE id=$1`, [id])
+        .catch(error => console.log(error))
 }
 
 module.exports = {
