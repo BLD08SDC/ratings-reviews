@@ -23,14 +23,14 @@ let reviews_photosPKIncrement = () => (reviews_photosPK += 1);
 // record start time
 const start = Date.now();
 
-for (let i = 1; i < 3; i += 1) {
+for (let i = 1; i < 11; i += 1) {
     // Generate a row in the product table
     fs.appendFileSync('../csvFiles/generated-product.csv', `${productPK},"${faker.commerce.productName()}","${faker.lorem.sentence()}","${faker.lorem.paragraph()}","${faker.commerce.department()}",${faker.random.number({ min: 1, max: 999 })}\n`);
 
     // Generate a row in the reviews table
     for (let j = 1; j < faker.random.number({ min: 1, max: 15}); j += 1) {
         // Generate a row in the reviews table
-        fs.appendFileSync('../csvFiles/generated-reviews.csv', `${reviewsPK},${productPK},${faker.random.number({ min: 1, max: 5 })},${faker.date.between('2015-12-23', '2020-04-20')},"${faker.lorem.sentence()}","${faker.lorem.paragraph()}",${faker.random.boolean()},${faker.random.boolean()},${faker.name.findName()},${faker.internet.email()},${faker.lorem.sentence()},${faker.random.number({ min: 0, max: 7 })},\n`);
+        fs.appendFileSync('../csvFiles/generated-reviews.csv', `${reviewsPK},${productPK},${faker.random.number({ min: 1, max: 5 })},"${faker.date.recent().toISOString()}","${faker.lorem.sentence()}","${faker.lorem.paragraph()}",${faker.random.boolean()},${faker.random.boolean()},${faker.name.findName()},${faker.internet.email()},${faker.lorem.sentence()},${faker.random.number({ min: 0, max: 7 })}\n`);
 
         // Generate a Size row in the characteristics table
         fs.appendFileSync('../csvFiles/generated-characteristics.csv', `${characteristicsPK},${productPK},"Size"\n`);
