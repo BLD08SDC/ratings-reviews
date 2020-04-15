@@ -1,4 +1,4 @@
--- \i '/Users/thomas/git-hackreactor/systemDesignCapstone/ratings-reviews-be/posgreSQLdbScript2.sql'
+-- \i '/Users/thomas/git-hackreactor/systemDesignCapstone/full/ratings-reviews/Database/Schema/ratingsreviewsbeINDEXED.sql'
 \c thomas
 
 DROP DATABASE IF EXISTS ratingsreviewsbe;
@@ -65,13 +65,12 @@ CREATE TABLE characteristics_reviews (
 CREATE INDEX characteristics_fk_characteristics_reviews ON characteristics_reviews (characteristic_id);
 CREATE INDEX reviews_fk_characteristics_reviews ON characteristics_reviews (review_id);
 
-COPY product (id, name, slogan, description, category, default_price) FROM '/Users/thomas/git-hackreactor/systemDesignCapstone/ratings-reviews-be/rawDataCSV/product.csv' DELIMITER ',' CSV HEADER;
--- COPY product (id, name, slogan, description, category, default_price) FROM '/Users/thomas/git-hackreactor/systemDesignCapstone/ratings-reviews-be/csv-files/generated-product.csv' DELIMITER ',' CSV;
+COPY product (id, name, slogan, description, category, default_price) FROM '/Users/thomas/git-hackreactor/systemDesignCapstone/full/ratings-reviews/Database/csvFiles/generated-product.csv' DELIMITER ',' CSV;
 
-COPY characteristics (id, product_id, name) FROM '/Users/thomas/git-hackreactor/systemDesignCapstone/ratings-reviews-be/rawDataCSV/characteristics.csv' DELIMITER ',' CSV HEADER;
+COPY characteristics (id, product_id, name) FROM '/Users/thomas/git-hackreactor/systemDesignCapstone/full/ratings-reviews/Database/csvFiles/generated-characteristics.csv' DELIMITER ',' CSV;
 
-COPY characteristics_reviews (id, characteristic_id, review_id, value) FROM '/Users/thomas/git-hackreactor/systemDesignCapstone/ratings-reviews-be/rawDataCSV/characteristic_reviews.csv' DELIMITER ',' CSV HEADER;
+COPY characteristics_reviews (id, characteristic_id, review_id, value) FROM '/Users/thomas/git-hackreactor/systemDesignCapstone/full/ratings-reviews/Database/csvFiles/generated-characteristics_reviews.csv' DELIMITER ',' CSV;
 
-COPY reviews (id, product_id, rating, date, summary, body, recommend, reported, reviewer_name, reviewer_email, response, helpfulness) FROM '/Users/thomas/git-hackreactor/systemDesignCapstone/ratings-reviews-be/rawDataCSV/reviews.csv' DELIMITER ',' CSV HEADER;
+COPY reviews (id, product_id, rating, date, summary, body, recommend, reported, reviewer_name, reviewer_email, response, helpfulness) FROM '/Users/thomas/git-hackreactor/systemDesignCapstone/full/ratings-reviews/Database/csvFiles/generated-reviews.csv' DELIMITER ',' CSV;
 
-COPY reviews_photos (id, review_id, url) FROM '/Users/thomas/git-hackreactor/systemDesignCapstone/ratings-reviews-be/rawDataCSV/reviews_photos.csv' DELIMITER ',' CSV HEADER;
+COPY reviews_photos (id, review_id, url) FROM '/Users/thomas/git-hackreactor/systemDesignCapstone/full/ratings-reviews/Database/csvFiles/generated-reviews_photos.csv' DELIMITER ',' CSV;
