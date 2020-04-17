@@ -7,42 +7,59 @@ const pool = new Pool(/* config */{
 });
 
 const getListOfReviews = (req) => {
-    // console.log(req)
-    const product_id = parseInt(req.product_id);
-    const page = parseInt(req.page) || 0;
-    const count = parseInt(req.count) || 5;
-    const sort = req.sort || 'date';
-    // const offsetBy = page * count || 0;
-
-    return pool
-      .query(`SELECT * FROM reviews FULL JOIN reviews_photos ON reviews.id = reviews_photos.review_id WHERE reviews.product_id=$1 AND NOT reviews.reported ORDER BY $3 DESC LIMIT $2`, [product_id, count, sort])
-      .then((data) => {
-        const results = data.rows.map(i => {
-          return ({
-          "review_id": i.id,
-          "rating": i.rating,
-          "summary": i.summary,
-          "recommend": i.recommend,
-          "response": i.response,
-          "body": i.body,
-          "date": i.date,
-          "reviewer_name": i.reviewer_name,
-          "helpfulness": i.helpfulness,
-          "photos": [],
-          })
-        });
+  const product_id = parseInt(req.product_id);
+  const page = parseInt(req.page) || 0;
+  const count = parseInt(req.count) * 5 || 25;
+  const sort = req.sort || 'date';
+  // figure out the page / count logic
   
-        // filter results var array for duplicates and fix how photo urls are returned
-        
-        return ({
-          "product": `${product_id}`,
-          "page": page,
-          "count": count,
-          "results": results,
-        })
+  return pool
+    .query(`
+      SELECT reviews.id AS review_id, rating, summary, recommend, response, body, date, reviewer_name, helpfulness, reviews_photos.id AS photo_id, url
+      FROM reviews LEFT OUTER JOIN reviews_photos ON reviews.id = reviews_photos.review_id 
+      WHERE reviews.product_id=$1
+      `, [product_id])
+    .then((data) => {
+      let photoArr = []
+      const results = data.rows.map(i => {
+        const review = ({
+        "review_id": i.review_id,
+        "rating": i.rating,
+        "summary": i.summary,
+        "recommend": i.recommend,
+        "response": i.response,
+        "body": i.body,
+        "date": i.date,
+        "reviewer_name": i.reviewer_name,
+        "helpfulness": i.helpfulness,
+        "photos": [],
+        });
+        if (i.photo_id !== null) {
+            index = i.review_id
+            photoArr.push({"photo_id": i.photo_id, "url": i.url});
+        }
+        return review;
+      });
+
+      const uniqueResults = Array.from(new Set(results.map(r => r.review_id))).map(review_id => (results.find(a => a.review_id === review_id)))
+      
+      photoArr.map(i => {
+        let reviewToAddPhotoTo = results.find(a => a.review_id === i.review_id);
+        reviewToAddPhotoTo.photos.push({"id": i.photo_id, "url": i.url})
       })
-      .catch(error => console.log(error))
-      // SELECT * FROM reviews FULL JOIN reviews_photos ON reviews.id = reviews_photos.review_id WHERE reviews.product_id=$1 AND NOT reviews.reported ORDER BY $3 DESC LIMIT $2
+
+      // limit to 5
+      // sort 
+      // in that order or vice versa - test both to see which is faster
+
+      return ({
+        "product": `${product_id}`,
+        "page": page,
+        "count": count,
+        "results": uniqueResults
+      })
+    })
+    .catch(error => console.log(error))
 }
 
 const getCharacteristicsMeta = (req, res) => {
